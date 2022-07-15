@@ -2,6 +2,9 @@ package com.skillstorm.im.test;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import com.skillstorm.im.daos.CompanyDAO;
@@ -21,22 +24,21 @@ public class WarehouseDAOTest {
 		this.dao = new MySQLWarehouseImp();
 	}
 	
-	//	public Warehouse save(Warehouse warehouse);
-	//	public List<Warehouse> findByCompanyId(int id);
-	//	public Warehouse findById(int id);
-	//	public void update(Warehouse warehouse);
-	//	public void delete(Warehouse warehouse);
-	//	public void delete(int id);
+	Company company;
+	Warehouse saved;
+	
+	@Before
+	public void beforeEach() {
+		// Create parent company
+		Company c = new Company("Test Company");
+		company = this.cDao.save(c);
+		Warehouse w = new Warehouse("Test Warehouse", "Test description", company.getId());
+		saved = this.dao.save(w);
+	}
 
 	@Test
 	public void CRUDWarehouse() {
-		// Create parent company
-		Company company = new Company("Test Company");
-		company = this.cDao.save(company);
-		
 		// Test save
-		Warehouse w = new Warehouse("Test Warehouse", "Test description", company.getId());
-		Warehouse saved = this.dao.save(w);
 		assertNotNull("Warehouse save return was null", saved);
 		
 		// Test find
@@ -65,16 +67,22 @@ public class WarehouseDAOTest {
 	
 	@Test
 	public void cascadeDeleteFromCompany() {
-		// Set-up
-		Company company = new Company("Test Company");
-		company = this.cDao.save(company);
-		Warehouse w = new Warehouse("Test Warehouse", "Test description", company.getId());
-		Warehouse saved = this.dao.save(w);
 		// Break-down
 		this.cDao.delete(company);
 		Warehouse wFind = this.dao.findById(saved.getId());
 		
 		assertNull("Warehouse was found", wFind);
+	}
+	
+	@Test
+	public void findByCompany() {
+		List<Warehouse> warehouses = dao.findByCompanyId(company.getId());
+		assertEquals("Wrong number of warehouses", 1, warehouses.size());
+		Warehouse wFind = warehouses.get(0);
+		assertNotNull("Warehouse find returned null", wFind);
+		assertEquals("Warehouse saved incorrectly", saved.getName(), wFind.getName());
+		assertEquals("Warehouse saved incorrectly", saved.getDescription(), wFind.getDescription());
+		assertEquals("Warehouse saved incorrectly", saved.getParentId(), wFind.getParentId());
 	}
 
 }

@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 //import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.skillstorm.im.conf.InventoryDBCredentials;
@@ -43,7 +44,30 @@ public class MySQLItemImp implements ItemDAO {
 
 	@Override
 	public List<Item> findBySectionId(int id) {
-		// TODO Auto-generated method stub
+		String sql = "SELECT * FROM im_item WHERE im_item_sect = (?)";
+		
+		try (Connection conn = InventoryDBCredentials.getInstance().getConnection()) {
+			// Create prepared statement
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			LinkedList<Item> items = new LinkedList<>();
+			
+			while(rs.next()) {
+				Item item = new Item(
+						rs.getInt("im_item_index"),
+						rs.getString("im_item_name"),
+						rs.getString("im_item_alt"),
+						rs.getString("im_item_desc"), 
+						rs.getInt("im_item_count"),
+						rs.getInt("im_item_sect")
+						);
+				items.add(item);
+			}
+			return items;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 	

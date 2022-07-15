@@ -2,6 +2,10 @@ package com.skillstorm.im.test;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.skillstorm.im.daos.CompanyDAO;
@@ -30,20 +34,34 @@ public class ItemDAOTest {
 		this.sDao = new MySQLSectionImp();
 		this.dao = new MySQLItemImp();
 	}
+	
+	Company company;
+	Warehouse warehouse;
+	Section section;
+	Item saved;
+	
+	@Before
+	public void beforeEach() {
+		// Create parent company, parent warehouse
+		Company c = new Company("Test Company");
+		company = this.cDao.save(c);
+		Warehouse w = new Warehouse("Test Warehouse", "Test description", company.getId());
+		warehouse = this.wDao.save(w);
+		Section s = new Section("Test Section", "Test description", 10, warehouse.getId());
+		section = this.sDao.save(s);
+		Item i = new Item(2, "Test item", "Test alternate", "Test description", 1000, section.getId());
+		saved = this.dao.save(i);
+	}
+	
+	@After
+	public void afterEach() {
+		this.wDao.delete(warehouse);
+		this.cDao.delete(company);
+	}
 
 	@Test
 	public void CRUDItem() {
-		// Create parent company, parent warehouse
-		Company company = new Company("Test Company");
-		company = this.cDao.save(company);
-		Warehouse warehouse = new Warehouse("Test Warehouse", "Test description", company.getId());
-		warehouse = this.wDao.save(warehouse);
-		Section section = new Section("Test Section", "Test description", 1, warehouse.getId());
-		section = this.sDao.save(section);
-		
 		// Test save
-		Item i = new Item(2, "Test item", "Test alternate", "Test description", 1000, section.getId());
-		Item saved = this.dao.save(i);
 		assertNotNull("Section save returned null", saved);
 		
 		// Test find
@@ -71,30 +89,25 @@ public class ItemDAOTest {
 		
 		// Delete parent section, warehouse, company
 		this.sDao.delete(section);
-		this.wDao.delete(warehouse);
-		this.cDao.delete(company);
 	}
 	
 	@Test
 	public void cascadeDeleteFromSection() {
-		// Set-up
-		Company company = new Company("Test Company");
-		company = this.cDao.save(company);
-		Warehouse warehouse = new Warehouse("Test Warehouse", "Test description", company.getId());
-		warehouse = this.wDao.save(warehouse);
-		Section section = new Section("Test Section", "Test description", 10, warehouse.getId());
-		section = this.sDao.save(section);
-		Item i = new Item(2, "Test item", "Test alternate", "Test description", 1000, section.getId());
-		Item saved = this.dao.save(i);
 		// Break-down
 		this.sDao.delete(section);
 		Item iFind = this.dao.findById(saved.getId(), 0);
-		try {
-			assertNull("Item was found", iFind);
-		} finally {
-			this.wDao.delete(warehouse);
-			this.cDao.delete(company);
-		}
+		assertNull("Item was found", iFind);
+	}
+	
+	@Test
+	public void findByCompany() {
+		List<Item> items = dao.findBySectionId(section.getId());
+		assertEquals("Wrong number of warehouses", 1, items.size());
+		Item iFind = items.get(0);
+		assertEquals("Item saved incorrectly", saved.getName(), iFind.getName());
+		assertEquals("Item saved incorrectly", saved.getAlt(), iFind.getAlt());
+		assertEquals("Item saved incorrectly", saved.getDescription(), iFind.getDescription());
+		assertEquals("Item saved incorrectly", saved.getCount(), iFind.getCount());
 	}
 
 }
