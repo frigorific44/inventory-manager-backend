@@ -55,15 +55,26 @@ public class WarehouseDAOTest {
 		assertNotEquals("Warehouse did not update", saved.getDescription(), wFind.getDescription());
 		
 		// Test delete
-//		this.dao.delete(saved);
-//		cFind = this.dao.findById(saved.getId());
-//		assertNull("Company was still found after delete", cFind);
 		this.dao.delete(saved);
 		wFind = this.dao.findById(saved.getId());
 		assertNull("Warehouse was found", wFind);
 		
 		// Delete parent company
 		this.cDao.delete(company);
+	}
+	
+	@Test
+	public void cascadeDeleteFromCompany() {
+		// Set-up
+		Company company = new Company("Test Company");
+		company = this.cDao.save(company);
+		Warehouse w = new Warehouse("Test Warehouse", "Test description", company.getId());
+		Warehouse saved = this.dao.save(w);
+		// Break-down
+		this.cDao.delete(company);
+		Warehouse wFind = this.dao.findById(saved.getId());
+		
+		assertNull("Warehouse was found", wFind);
 	}
 
 }

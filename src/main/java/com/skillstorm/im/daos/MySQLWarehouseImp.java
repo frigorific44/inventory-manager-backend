@@ -48,7 +48,7 @@ public class MySQLWarehouseImp implements WarehouseDAO {
 
 	@Override
 	public List<Warehouse> findByCompanyId(int id) {
-		String sql = "SELECT * FROM im_company WHERE im_comp_id = (?)";
+		String sql = "SELECT * FROM im_warehouse WHERE im_ware_comp = (?)";
 		
 		try (Connection conn = InventoryDBCredentials.getInstance().getConnection()) {
 			// Create prepared statement
@@ -81,7 +81,12 @@ public class MySQLWarehouseImp implements WarehouseDAO {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				return new Warehouse(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4));
+				return new Warehouse(
+						rs.getInt(1),
+						rs.getString(2),
+						rs.getString(3),
+						rs.getInt(4)
+						);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
