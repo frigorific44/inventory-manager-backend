@@ -16,6 +16,11 @@ import com.skillstorm.im.models.Company;
 import com.skillstorm.im.services.URLParserService;
 import com.skillstorm.im.models.NotFound;
 
+/**
+ * Our top level entity. A company should be create upon account creation,
+ * and only the name can be changed. A company is retrieved each time a user logs in
+ * to be able to retrieve the inventory entities under it.
+ */
 @WebServlet(urlPatterns = "/company/*")
 public class CompanyServlet extends HttpServlet {
 

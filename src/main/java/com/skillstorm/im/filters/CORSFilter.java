@@ -15,11 +15,12 @@ import javax.servlet.http.HttpServletResponse;
 @WebFilter(urlPatterns = "/*")
 public class CORSFilter implements Filter {
 
+	// Must be overridden.
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		
 	}
-	
+	// Must be overridden.
 	@Override
 	public void destroy() {
 		

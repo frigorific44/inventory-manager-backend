@@ -1,5 +1,9 @@
 package com.skillstorm.im.models;
 
+/**
+ * Units that make up a warehouse. A section has a capacity which
+ * represents the number of consistently-sized pallets it can contain.
+ */
 public class Section extends InventoryEntity {
 	
 	private int capacity;

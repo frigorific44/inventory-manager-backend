@@ -1,5 +1,13 @@
 package com.skillstorm.im.models;
 
+/**
+ * The atomic unit of our inventory manager. An item represents a palletized
+ * product within a size consistent within all other warehouse items.
+ * The id of item is not auto-incremented, and must therefore be chosen,
+ * as it is an item's index within a section of specified capacity.
+ * Alt is an id used by the user, and count represents the product count
+ * within the pallet.
+ */
 public class Item extends InventoryEntity {
 //	Item is slightly different, in that its primary key is
 //	made up of the section id, and its own id, which is

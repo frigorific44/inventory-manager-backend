@@ -43,6 +43,9 @@ public class SectionServelet extends HttpServlet {
 		}
 	}
 	
+	/**
+	 * GET retrieves sections from a warehouse id, rather than a section from its own id.
+	 */
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {

@@ -1,5 +1,8 @@
 package com.skillstorm.im.models;
 
+/**
+ * Inventory-unit entities include a description, and the id or their parent entity.
+ */
 abstract class InventoryEntity extends InventoryRoot {
 
 	String description;

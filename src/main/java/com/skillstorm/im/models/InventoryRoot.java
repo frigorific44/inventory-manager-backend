@@ -1,5 +1,8 @@
 package com.skillstorm.im.models;
 
+/**
+ * All entities within the schema contain an id and a name.
+ */
 abstract class InventoryRoot {
 
 	int id;

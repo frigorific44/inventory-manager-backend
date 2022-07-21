@@ -44,6 +44,9 @@ public class ItemServelet extends HttpServlet {
 		}
 	}
 	
+	/**
+	 * GET retrieves items from a section id, rather than an item from its own id.
+	 */
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
@@ -64,6 +67,10 @@ public class ItemServelet extends HttpServlet {
 		}
 	}
 	
+	/**
+	 * On PUT, an id is not changed, as for an item it is one portion of its composite key.
+	 * We handle id changes by splitting it into a POST and a DELETE on the front-end.
+	 */
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		InputStream reqBody = req.getInputStream();

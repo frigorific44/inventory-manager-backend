@@ -43,6 +43,9 @@ public class WarehouseServelet extends HttpServlet {
 		}
 	}
 	
+	/**
+	 * GET retrieves warehouses from a company id, rather than a warehouse from its own id.
+	 */
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {

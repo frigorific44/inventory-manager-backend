@@ -7,6 +7,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+/**
+ * A singleton that manages the database credentials stored in application.properties
+ */
 public class InventoryDBCredentials {
 	
 	private static InventoryDBCredentials instance;
@@ -35,7 +38,11 @@ public class InventoryDBCredentials {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * Returns an instance of the database credentials singleton. The instance is lazily instantiated.
+	 * @return An instance of the InventoryDBCredentials singleton.
+	 */
 	public static InventoryDBCredentials getInstance() {
 		if (instance == null) {
 			instance = new InventoryDBCredentials();
@@ -55,6 +62,11 @@ public class InventoryDBCredentials {
 		return password;
 	}
 	
+	/**
+	 * Helper function to return a connection.
+	 * @return Connection
+	 * @throws SQLException
+	 */
 	public Connection getConnection() throws SQLException {
 		return DriverManager.getConnection(url, username, password);
 	}

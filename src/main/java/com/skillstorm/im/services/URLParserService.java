@@ -1,5 +1,8 @@
 package com.skillstorm.im.services;
 
+/**
+ * A service class for parsing ids from request URLs.
+ */
 public class URLParserService {
 
 	public int extractIdFromURL(String url) {

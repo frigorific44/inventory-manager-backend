@@ -1,5 +1,9 @@
 package com.skillstorm.im.models;
 
+/**
+ * The largest storage unit. A warehouse contains sections, which contain
+ * palletized items.
+ */
 public class Warehouse extends InventoryEntity {
 
 	public Warehouse() {
